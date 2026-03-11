@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mouad Anouar — Full Stack Developer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            accent: '#08CB00',
+            'accent-light': '#3ddf3a',
+            'accent-dark': '#069900',
+            dark: '#0a0a0f',
+            'dark-2': '#111118',
+            'dark-3': '#1a1a24',
+            'dark-4': '#22222f',
+          },
+          animation: {
+            'spin-slow': 'spin 8s linear infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { background-color: #0a0a0f; color: #e2e2f0; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: #08CB00; border-radius: 10px; }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #08CB00 0%, #3ddf3a 50%, #00e676 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Noise overlay */
+    .noise::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* Glow effects */
+    .glow { box-shadow: 0 0 40px rgba(8, 203, 0, 0.3); }
+    .glow-sm { box-shadow: 0 0 20px rgba(8, 203, 0, 0.2); }
+    .text-glow { text-shadow: 0 0 30px rgba(8, 203, 0, 0.6); }
+
+    /* Nav link hover */
+    .nav-link::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: #08CB00;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Card hover */
+    .card {
+      background: linear-gradient(135deg, #1a1a24 0%, #111118 100%);
+      border: 1px solid rgba(8, 203, 0, 0.15);
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      border-color: rgba(8, 203, 0, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(8, 203, 0, 0.15);
+    }
+
+    /* Skill bar */
+    .skill-bar-fill { transition: width 1.5s cubic-bezier(0.4,0,0.2,1); }
+
+    /* Blob */
+    .blob {
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: morph 8s ease-in-out infinite;
+    }
+    @keyframes morph {
+      0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      25%     { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      50%     { border-radius: 50% 60% 30% 60% / 30% 40% 70% 50%; }
+      75%     { border-radius: 40% 60% 50% 40% / 60% 40% 50% 30%; }
+    }
+
+    /* Grid background */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(8,203,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,203,0,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Timeline line */
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      bottom: -2rem;
+      width: 2px;
+      background: linear-gradient(to bottom, #08CB00, transparent);
+    }
+    .timeline-item:last-child::before { display: none; }
+
+    /* Cursor */
+    #cursor {
+      width: 12px; height: 12px;
+      background: #08CB00;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      mix-blend-mode: screen;
+      transition: transform 0.1s ease;
+    }
+    #cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(8,203,0,0.6);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 99998;
+      transition: transform 0.15s ease, width 0.2s, height 0.2s;
+    }
+
+    /* Float animation */
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .float { animation: float 4s ease-in-out infinite; }
+
+    /* Tag */
+    .tag {
+      background: rgba(8,203,0,0.1);
+      border: 1px solid rgba(8,203,0,0.3);
+      color: #3ddf3a;
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* Mobile menu */
+    #mobile-menu { transition: max-height 0.4s ease, opacity 0.4s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    #mobile-menu.open { max-height: 400px; opacity: 1; }
+
+    /* section hidden for reveal */
+    .reveal { opacity: 0; transform: translateY(40px); }
+  </style>
+</head>
+
+<body class="noise">
+  <!-- Custom cursor (hidden on touch) -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ─── NAVBAR ─────────────────────────────────────────── -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#hero" class="font-mono text-xl font-bold gradient-text">&lt;DEV/&gt;</a>
+      <!-- Desktop links -->
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+        <li><a href="#about"      class="nav-link hover:text-white transition">About</a></li>
+        <li><a href="#skills"     class="nav-link hover:text-white transition">Skills</a></li>
+        <li><a href="#projects"   class="nav-link hover:text-white transition">Projects</a></li>
+        <li><a href="#experience" class="nav-link hover:text-white transition">Experience</a></li>
+        <li><a href="#contact"    class="nav-link hover:text-white transition">Contact</a></li>
+      </ul>
+      <!-- CTA -->
+      <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 glow-sm">
+        Hire Me
+      </a>
+      <!-- Hamburger -->
+      <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
+        <span class="w-6 h-0.5 bg-white transition-all duration-300" id="h1"></span>
+        <span class="w-6 h-0.5 bg-white transition-all duration-300" id="h2"></span>
+        <span class="w-4 h-0.5 bg-white transition-all duration-300" id="h3"></span>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden bg-dark-2 border-t border-dark-4 px-6">
+      <ul class="flex flex-col gap-4 py-6 text-sm font-medium text-gray-400">
+        <li><a href="#about"      class="hover:text-white transition" onclick="closeMobileMenu()">About</a></li>
+        <li><a href="#skills"     class="hover:text-white transition" onclick="closeMobileMenu()">Skills</a></li>
+        <li><a href="#projects"   class="hover:text-white transition" onclick="closeMobileMenu()">Projects</a></li>
+        <li><a href="#experience" class="hover:text-white transition" onclick="closeMobileMenu()">Experience</a></li>
+        <li><a href="#contact"    class="hover:text-white transition" onclick="closeMobileMenu()">Contact</a></li>
+        <li><a href="#contact"    class="text-accent font-semibold"   onclick="closeMobileMenu()">Hire Me →</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ──────────────────────────────────────────── -->
+  <section id="hero" class="relative min-h-screen flex items-center grid-bg overflow-hidden">
+    <!-- Background blobs -->
+    <div class="absolute top-20 right-10 w-96 h-96 bg-accent opacity-10 blob blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-20 left-10 w-72 h-72 bg-pink-600 opacity-8 blob blur-3xl pointer-events-none" style="animation-delay:-3s"></div>
+
+    <div class="max-w-6xl mx-auto px-6 pt-28 pb-20 grid md:grid-cols-2 gap-12 items-center">
+      <!-- Text side -->
+      <div>
+        <p id="hero-tag" class="font-mono text-accent text-sm mb-4 opacity-0">// Hello, World!</p>
+        <h1 id="hero-h1" class="text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-4 opacity-0">
+          I'm <span class="gradient-text">Mouad</span><br/>Anouar
+        </h1>
+        <p id="hero-sub" class="text-gray-400 text-lg leading-relaxed mb-8 max-w-lg opacity-0">
+          Full Stack Developer — I build modern, performant and secure web apps with React.js, Node.js &amp; clean REST APIs.
+        </p>
+        <div id="hero-cta" class="flex flex-wrap gap-4 opacity-0">
+          <a href="#projects"
+             class="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white font-semibold px-7 py-3.5 rounded-full transition-all duration-300 glow">
+            View Projects
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+          <a href="#contact"
+             class="inline-flex items-center gap-2 border border-accent/40 hover:border-accent text-white font-semibold px-7 py-3.5 rounded-full transition-all duration-300">
+            Contact Me
+          </a>
+        </div>
+        <!-- Socials -->
+        <div id="hero-socials" class="flex gap-5 mt-10 opacity-0">
+          <a href="https://github.com/M0U3AD" aria-label="GitHub" class="text-gray-500 hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/mouad-anouar-0aa0a839b/" aria-label="LinkedIn" class="text-gray-500 hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Visual side -->
+      <div id="hero-visual" class="relative flex items-center justify-center opacity-0">
+        <div class="relative w-72 h-72 md:w-80 md:h-80">
+          <!-- Rotating ring -->
+          <div class="absolute inset-0 rounded-full border border-accent/20 animate-spin-slow"></div>
+          <div class="absolute inset-4 rounded-full border border-dashed border-accent/10 animate-spin-slow" style="animation-direction:reverse;animation-duration:12s"></div>
+          <!-- Avatar blob -->
+          <div class="absolute inset-8 blob bg-gradient-to-br from-accent via-green-600 to-emerald-500 opacity-80 glow"></div>
+          <div class="absolute inset-8 flex items-center justify-center">
+            <img src="pic.JPG" alt="Mouad Anouar" class="w-full h-full rounded-full object-cover">
+          </div>
+          <!-- Floating badges -->
+          <div class="absolute -top-4 -right-4 float bg-dark-3 border border-accent/30 rounded-xl px-3 py-2 text-xs font-mono text-accent glow-sm">
+            &lt;React /&gt;
+          </div>
+          <div class="absolute -bottom-4 -left-4 float bg-dark-3 border border-pink-500/30 rounded-xl px-3 py-2 text-xs font-mono text-pink-400 flex items-center gap-1.5" style="animation-delay:-2s">
+            <i data-lucide="zap" class="w-3 h-3"></i> Node.js
+          </div>
+          <div class="absolute top-1/2 -right-14 float bg-dark-3 border border-green-500/30 rounded-xl px-3 py-2 text-xs font-mono text-green-400 flex items-center gap-1.5" style="animation-delay:-1s">
+            <i data-lucide="database" class="w-3 h-3"></i> MySQL
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-600 text-xs">
+      <span>scroll</span>
+      <div class="w-px h-12 bg-gradient-to-b from-accent to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- ─── ABOUT ─────────────────────────────────────────── -->
+  <section id="about" class="py-28">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <!-- Code block visual -->
+        <div class="reveal">
+          <div class="card rounded-2xl overflow-hidden">
+            <div class="flex items-center gap-2 px-4 py-3 bg-dark-4 border-b border-dark-4">
+              <span class="w-3 h-3 rounded-full bg-red-500"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="ml-3 text-xs text-gray-500 font-mono">about.json</span>
+            </div>
+            <pre class="p-6 text-sm font-mono leading-relaxed overflow-x-auto text-gray-300"><code><span class="text-blue-400">{</span>
+  <span class="text-purple-400">"name"</span>: <span class="text-green-400">"Mouad Anouar"</span>,
+  <span class="text-purple-400">"role"</span>: <span class="text-green-400">"Full Stack Developer"</span>,
+  <span class="text-purple-400">"location"</span>: <span class="text-green-400">"Temara, Maroc"</span>,
+  <span class="text-purple-400">"education"</span>: <span class="text-green-400">"ISTA — Dev Web Full Stack"</span>,
+  <span class="text-purple-400">"available"</span>: <span class="text-cyan-400">true</span>,
+  <span class="text-purple-400">"passions"</span>: <span class="text-blue-400">[</span>
+    <span class="text-green-400">"Clean Code"</span>,
+    <span class="text-green-400">"REST APIs"</span>,
+    <span class="text-green-400">"Great UX"</span>
+  <span class="text-blue-400">]</span>
+<span class="text-blue-400">}</span></code></pre>
+          </div>
+          <!-- Stats row -->
+          <div class="grid grid-cols-3 gap-4 mt-6">
+            <div class="card rounded-xl p-4 text-center">
+              <div class="text-3xl font-black gradient-text">1+</div>
+              <div class="text-xs text-gray-500 mt-1">Years Exp.</div>
+            </div>
+            <div class="card rounded-xl p-4 text-center">
+              <div class="text-3xl font-black gradient-text">2+</div>
+              <div class="text-xs text-gray-500 mt-1">Projects</div>
+            </div>
+            <div class="card rounded-xl p-4 text-center">
+              <div class="text-3xl font-black gradient-text">1+</div>
+              <div class="text-xs text-gray-500 mt-1">Happy Clients</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="reveal">
+          <p class="font-mono text-accent text-sm mb-3">// about me</p>
+          <h2 class="text-4xl font-black mb-6">Who I <span class="gradient-text">Am</span></h2>
+          <p class="text-gray-400 leading-relaxed mb-5">
+            I'm a motivated and detail-oriented Full Stack Developer, skilled in building modern, performant and secure web applications. I'm comfortable across the entire stack — from relational databases and RESTful APIs to polished, responsive UIs.
+          </p>
+          <p class="text-gray-400 leading-relaxed mb-8">
+            Currently in my second year of Full Stack Web Development at ISTA, with hands-on project experience using React.js, Node.js, Express.js and MySQL. Open to internship or junior developer opportunities.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <span class="tag">Problem Solver</span>
+            <span class="tag">Clean Architecture</span>
+            <span class="tag">REST APIs</span>
+            <span class="tag">JWT Auth</span>
+            <span class="tag">Performance Focused</span>
+          </div>
+          <a href="Mouad_Anouar_CV_FR.pdf" download
+             class="mt-8 inline-flex items-center gap-2 bg-dark-3 hover:bg-dark-4 border border-accent/30 hover:border-accent text-white text-sm font-semibold px-6 py-3 rounded-full transition-all duration-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Download Resume
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SKILLS ────────────────────────────────────────── -->
+  <section id="skills" class="py-28 bg-dark-2">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <p class="font-mono text-accent text-sm mb-3">// what i work with</p>
+        <h2 class="text-4xl font-black">Tech <span class="gradient-text">Stack</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12">
+        <!-- Frontend -->
+        <div class="reveal">
+          <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-accent"></span> Frontend
+          </h3>
+          <div class="space-y-5">
+            <div class="skill-item" data-level="90">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">HTML</span><span class="text-accent font-mono">90%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="85">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">React.js</span><span class="text-accent font-mono">85%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="80">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">JavaScript</span><span class="text-accent font-mono">80%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="85">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">Tailwind CSS</span><span class="text-accent font-mono">85%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="75">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">WordPress / WooCommerce</span><span class="text-accent font-mono">75%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backend -->
+        <div class="reveal">
+          <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-pink-500"></span> Backend & DevOps
+          </h3>
+          <div class="space-y-5">
+            <div class="skill-item" data-level="88">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">Node.js / Express.js</span><span class="text-pink-400 font-mono">88%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="82">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">MySQL</span><span class="text-pink-400 font-mono">82%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="85">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">REST APIs / JWT Auth</span><span class="text-pink-400 font-mono">85%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="78">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">Git &amp; GitHub</span><span class="text-pink-400 font-mono">78%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="70">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">Laravel / PHP</span><span class="text-pink-400 font-mono">70%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="skill-item" data-level="65">
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">Linux / CLI</span><span class="text-pink-400 font-mono">65%</span></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech icons ribbon -->
+      <div class="mt-16 reveal">
+        <p class="text-center text-xs text-gray-600 font-mono mb-6">// tools & technologies</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <span class="tag">React.js</span><span class="tag">JavaScript</span><span class="tag">Tailwind CSS</span>
+          <span class="tag">Node.js</span><span class="tag">Express.js</span><span class="tag">MySQL</span>
+          <span class="tag">REST APIs</span><span class="tag">JWT</span><span class="tag">Laravel</span>
+          <span class="tag">PHP</span><span class="tag">WordPress</span><span class="tag">WooCommerce</span>
+          <span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">Linux</span>
+          <span class="tag">Vite</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROJECTS ──────────────────────────────────────── -->
+  <section id="projects" class="py-28">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <p class="font-mono text-accent text-sm mb-3">// what i've built</p>
+        <h2 class="text-4xl font-black">Featured <span class="gradient-text">Projects</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Project 1 — Tirani -->
+        <div class="card rounded-2xl overflow-hidden reveal project-card group">
+          <div class="h-44 bg-gradient-to-br from-accent/20 via-emerald-900/30 to-dark-3 relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <i data-lucide="globe" class="w-16 h-16 text-accent opacity-60"></i>
+            </div>
+            <div class="absolute top-3 right-3"><span class="tag">Full Stack</span></div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-white font-bold text-lg mb-2">Tirani — Web App</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Full stack web application built end-to-end: React.js + Vite frontend, Node.js/Express REST API with JWT role-based auth, and a MySQL database.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tag">React.js</span><span class="tag">Vite</span><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">MySQL</span><span class="tag">JWT</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="#" class="flex-1 text-center text-xs font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 py-2 rounded-lg transition">Live Demo</a>
+              <a href="#" class="flex-1 text-center text-xs font-semibold bg-dark-4 hover:bg-dark-3 text-gray-300 py-2 rounded-lg transition">GitHub</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 — E-Commerce WordPress -->
+        <div class="card rounded-2xl overflow-hidden reveal project-card group">
+          <div class="h-44 bg-gradient-to-br from-pink-900/30 via-rose-900/20 to-dark-3 relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <i data-lucide="shopping-cart" class="w-16 h-16 text-pink-400 opacity-60"></i>
+            </div>
+            <div class="absolute top-3 right-3"><span class="tag">Freelance</span></div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-white font-bold text-lg mb-2">E-Commerce Store</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Full e-commerce site delivered for a real client using WordPress &amp; WooCommerce — product catalogue, cart, payment integration, SEO optimisation &amp; responsive design.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tag">WordPress</span><span class="tag">WooCommerce</span><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">CSS</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="#" class="flex-1 text-center text-xs font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 py-2 rounded-lg transition">Live Demo</a>
+              <a href="#" class="flex-1 text-center text-xs font-semibold bg-dark-4 hover:bg-dark-3 text-gray-300 py-2 rounded-lg transition">GitHub</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 — CTA -->
+        <div class="card rounded-2xl reveal flex flex-col items-center justify-center p-8 text-center border-dashed !border-accent/20 hover:!border-accent/50">
+          <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          </div>
+          <h3 class="text-white font-bold mb-2">More on GitHub</h3>
+          <p class="text-gray-500 text-sm mb-5">Check out my open-source contributions and side projects.</p>
+          <a href="#" class="text-xs font-semibold text-accent hover:underline">View all repos →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── EXPERIENCE ────────────────────────────────────── -->
+  <section id="experience" class="py-28 bg-dark-2">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <p class="font-mono text-accent text-sm mb-3">// where i've worked</p>
+        <h2 class="text-4xl font-black">Work <span class="gradient-text">Experience</span></h2>
+      </div>
+
+      <div class="relative border-l-2 border-accent/20 ml-4 md:ml-8">
+
+        <!-- Experience 1 — Tirani -->
+        <div class="relative pl-10 pb-12 timeline-item reveal">
+          <div class="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-dark-2 glow-sm"></div>
+          <div class="card rounded-2xl p-6">
+            <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+              <div>
+                <h3 class="text-white font-bold text-lg">Full Stack Developer</h3>
+                <p class="text-accent text-sm font-medium">Tirani — Academic Project</p>
+              </div>
+              <span class="tag">2024</span>
+            </div>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Designed and developed a complete full stack web application. Built a React.js + Vite frontend, a robust RESTful API with Node.js/Express including JWT authentication and role-based permissions, and a MySQL database optimised for data integrity and query performance.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">React.js</span><span class="tag">Vite</span><span class="tag">Tailwind CSS</span><span class="tag">Node.js</span><span class="tag">Express.js</span><span class="tag">MySQL</span><span class="tag">JWT</span><span class="tag">Linux</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 2 — Freelance -->
+        <div class="relative pl-10 pb-12 timeline-item reveal">
+          <div class="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-purple-500 border-4 border-dark-2"></div>
+          <div class="card rounded-2xl p-6">
+            <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+              <div>
+                <h3 class="text-white font-bold text-lg">Freelance Web Developer</h3>
+                <p class="text-purple-400 text-sm font-medium">E-Commerce WordPress Site — Real Client</p>
+              </div>
+              <span class="tag">2024</span>
+            </div>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Delivered a complete e-commerce website for a professional client using WordPress &amp; WooCommerce: product catalogue, shopping cart, payment integration, theme &amp; plugin customisation, SEO best practices, security hardening, and responsive cross-browser design.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">WordPress</span><span class="tag">WooCommerce</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">PHP</span><span class="tag">MySQL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="relative pl-10 pb-4 reveal">
+          <div class="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-pink-500 border-4 border-dark-2"></div>
+          <div class="card rounded-2xl p-6">
+            <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+              <div>
+                <h3 class="text-white font-bold text-lg">Full Stack Web Development</h3>
+                <p class="text-pink-400 text-sm font-medium">ISTA — Diplôme Développement Web</p>
+              </div>
+              <span class="tag">2024 — Present</span>
+            </div>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Two-year professional training programme covering modern web development: JavaScript, React.js, Node.js, REST APIs, MySQL, Laravel/PHP, Git and Linux. Baccalauréat Sciences Physiques (2023–2024).</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">JavaScript</span><span class="tag">React.js</span><span class="tag">Node.js</span><span class="tag">MySQL</span><span class="tag">Laravel</span><span class="tag">Git</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ───────────────────────────────────────── -->
+  <section id="contact" class="py-28 relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg pointer-events-none"></div>
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-accent/10 blur-3xl rounded-full pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto px-6 relative">
+      <div class="text-center mb-16 reveal">
+        <p class="font-mono text-accent text-sm mb-3">// let's work together</p>
+        <h2 class="text-4xl font-black">Get In <span class="gradient-text">Touch</span></h2>
+        <p class="text-gray-400 mt-4 max-w-xl mx-auto">Looking for a motivated Full Stack developer for an internship or junior role? I'd love to hear from you.</p>
+      </div>
+
+      <div class="grid md:grid-cols-5 gap-10">
+        <!-- Info -->
+        <div class="md:col-span-2 flex flex-col gap-5 reveal">
+          <a href="mailto:mouadanouar27@gmail.com" class="card rounded-2xl p-5 flex items-center gap-4 group">
+            <div class="w-11 h-11 rounded-xl bg-accent/10 group-hover:bg-accent/20 flex items-center justify-center transition">
+              <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 mb-0.5">Email</p>
+              <p class="text-white text-sm font-medium">mouadanouar27@gmail.com</p>
+            </div>
+          </a>
+          <a href="tel:+212621382310" class="card rounded-2xl p-5 flex items-center gap-4 group">
+            <div class="w-11 h-11 rounded-xl bg-blue-500/10 group-hover:bg-blue-500/20 flex items-center justify-center transition">
+              <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 mb-0.5">Phone</p>
+              <p class="text-white text-sm font-medium">+212 621 382 310</p>
+            </div>
+          </a>
+          <a href="https://github.com/M0U3AD" target="_blank" rel="noopener" class="card rounded-2xl p-5 flex items-center gap-4 group">
+            <div class="w-11 h-11 rounded-xl bg-gray-500/10 group-hover:bg-gray-500/20 flex items-center justify-center transition">
+              <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 mb-0.5">GitHub</p>
+              <p class="text-white text-sm font-medium">https://github.com/M0U3AD</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- Form -->
+        <form id="contact-form" class="md:col-span-3 card rounded-2xl p-8 reveal" onsubmit="handleForm(event)">
+          <div class="grid sm:grid-cols-2 gap-5 mb-5">
+            <div>
+              <label class="text-xs text-gray-500 font-medium mb-2 block">Name</label>
+              <input type="text" placeholder="John Doe" required minlength="2" maxlength="100"
+                class="w-full bg-dark-4 border border-dark-4 focus:border-accent text-white text-sm placeholder-gray-600 px-4 py-3 rounded-xl outline-none transition" />
+            </div>
+            <div>
+              <label class="text-xs text-gray-500 font-medium mb-2 block">Email</label>
+              <input type="email" placeholder="john@example.com" required maxlength="200"
+                class="w-full bg-dark-4 border border-dark-4 focus:border-accent text-white text-sm placeholder-gray-600 px-4 py-3 rounded-xl outline-none transition" />
+            </div>
+          </div>
+          <div class="mb-5">
+            <label class="text-xs text-gray-500 font-medium mb-2 block">Subject</label>
+            <input type="text" placeholder="Project idea / Collaboration" required minlength="2" maxlength="200"
+              class="w-full bg-dark-4 border border-dark-4 focus:border-accent text-white text-sm placeholder-gray-600 px-4 py-3 rounded-xl outline-none transition" />
+          </div>
+          <div class="mb-6">
+            <label class="text-xs text-gray-500 font-medium mb-2 block">Message</label>
+            <textarea rows="5" placeholder="Tell me about your project..." required minlength="10" maxlength="2000"
+              class="w-full bg-dark-4 border border-dark-4 focus:border-accent text-white text-sm placeholder-gray-600 px-4 py-3 rounded-xl outline-none transition resize-none"></textarea>
+          </div>
+          <button type="submit"
+            class="w-full bg-accent hover:bg-accent-light text-white font-semibold py-3.5 rounded-xl transition-all duration-300 glow flex items-center justify-center gap-2">
+            <span id="btn-text">Send Message</span>
+            <svg id="btn-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          </button>
+          <p id="form-success" class="hidden text-center text-green-400 text-sm mt-4 flex items-center justify-center gap-1.5"><i data-lucide="circle-check" class="w-4 h-4"></i> Message sent! I'll get back to you soon.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ────────────────────────────────────────── -->
+  <footer class="bg-dark-2 border-t border-dark-4 py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      <a href="#hero" class="font-mono text-xl font-bold gradient-text">&lt;dev /&gt;</a>
+      <p class="text-gray-600 text-sm text-center">
+        Mouad Anouar — Full Stack Developer — &copy; <span id="year"></span>
+      </p>
+      <div class="flex gap-5">
+        <a href="https://github.com/M0U3AD" target="_blank" rel="noopener" class="text-gray-600 hover:text-white transition text-sm">GitHub</a>
+        <a href="mailto:mouadanouar27@gmail.com" class="text-gray-600 hover:text-white transition text-sm">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── SCRIPTS ───────────────────────────────────────── -->
+  <script src="script.js"></script>
+</body>
+</html>
