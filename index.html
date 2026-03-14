@@ -21,9 +21,9 @@
             mono: ['Fira Code', 'monospace'],
           },
           colors: {
-            accent: '#08CB00',
-            'accent-light': '#3ddf3a',
-            'accent-dark': '#069900',
+            accent: '#016B61',
+            'accent-light': '#02A78D',
+            'accent-dark': '#014A44',
             dark: '#0a0a0f',
             'dark-2': '#111118',
             'dark-3': '#1a1a24',
@@ -43,11 +43,11 @@
     /* Custom scrollbar */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: #0a0a0f; }
-    ::-webkit-scrollbar-thumb { background: #08CB00; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #016B61; border-radius: 10px; }
 
     /* Gradient text */
     .gradient-text {
-      background: linear-gradient(135deg, #08CB00 0%, #3ddf3a 50%, #00e676 100%);
+      background: linear-gradient(135deg, #016B61 0%, #02A78D 50%, #35D6BC 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -65,9 +65,9 @@
     }
 
     /* Glow effects */
-    .glow { box-shadow: 0 0 40px rgba(8, 203, 0, 0.3); }
-    .glow-sm { box-shadow: 0 0 20px rgba(8, 203, 0, 0.2); }
-    .text-glow { text-shadow: 0 0 30px rgba(8, 203, 0, 0.6); }
+    .glow { box-shadow: 0 0 40px rgba(1, 107, 97, 0.3); }
+    .glow-sm { box-shadow: 0 0 20px rgba(1, 107, 97, 0.2); }
+    .text-glow { text-shadow: 0 0 30px rgba(1, 107, 97, 0.6); }
 
     /* Nav link hover */
     .nav-link::after {
@@ -75,7 +75,7 @@
       display: block;
       width: 0;
       height: 2px;
-      background: #08CB00;
+      background: #016B61;
       transition: width 0.3s ease;
     }
     .nav-link:hover::after { width: 100%; }
@@ -83,13 +83,13 @@
     /* Card hover */
     .card {
       background: linear-gradient(135deg, #1a1a24 0%, #111118 100%);
-      border: 1px solid rgba(8, 203, 0, 0.15);
+      border: 1px solid rgba(1, 107, 97, 0.15);
       transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
     .card:hover {
-      border-color: rgba(8, 203, 0, 0.5);
+      border-color: rgba(1, 107, 97, 0.5);
       transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(8, 203, 0, 0.15);
+      box-shadow: 0 20px 60px rgba(1, 107, 97, 0.15);
     }
 
     /* Skill bar */
@@ -110,8 +110,8 @@
     /* Grid background */
     .grid-bg {
       background-image:
-        linear-gradient(rgba(8,203,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(8,203,0,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(1,107,97,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(1,107,97,0.04) 1px, transparent 1px);
       background-size: 60px 60px;
     }
 
@@ -123,14 +123,14 @@
       top: 0;
       bottom: -2rem;
       width: 2px;
-      background: linear-gradient(to bottom, #08CB00, transparent);
+      background: linear-gradient(to bottom, #016B61, transparent);
     }
     .timeline-item:last-child::before { display: none; }
 
     /* Cursor */
     #cursor {
       width: 12px; height: 12px;
-      background: #08CB00;
+      background: #016B61;
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
@@ -140,7 +140,7 @@
     }
     #cursor-ring {
       width: 36px; height: 36px;
-      border: 1px solid rgba(8,203,0,0.6);
+      border: 1px solid rgba(1,107,97,0.6);
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
@@ -154,9 +154,9 @@
 
     /* Tag */
     .tag {
-      background: rgba(8,203,0,0.1);
-      border: 1px solid rgba(8,203,0,0.3);
-      color: #3ddf3a;
+      background: rgba(1,107,97,0.1);
+      border: 1px solid rgba(1,107,97,0.3);
+      color: #35D6BC;
       font-size: 0.7rem;
       padding: 2px 10px;
       border-radius: 9999px;
@@ -181,7 +181,7 @@
   <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <!-- Logo -->
-      <a href="#hero" class="font-mono text-xl font-bold gradient-text">&lt;DEV/&gt;</a>
+      <a href="#hero" class="font-mono text-xl font-bold gradient-text">&lt;DEV../&gt;</a>
       <!-- Desktop links -->
       <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
         <li><a href="#about"      class="nav-link hover:text-white transition">About</a></li>
@@ -226,8 +226,7 @@
         <p id="hero-tag" class="font-mono text-accent text-sm mb-4 opacity-0">// Hello, World!</p>
         <h1 id="hero-h1" class="text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-4 opacity-0">
           I'm <span class="gradient-text">Mouad</span><br/>Anouar
-        </h1>
-        <p id="hero-sub" class="text-gray-400 text-lg leading-relaxed mb-8 max-w-lg opacity-0">
+        </h1>        <p id="hero-sub" class="text-gray-400 text-lg leading-relaxed mb-8 max-w-lg opacity-0">
           Full Stack Developer — I build modern, performant and secure web apps with React.js, Node.js &amp; clean REST APIs.
         </p>
         <div id="hero-cta" class="flex flex-wrap gap-4 opacity-0">
@@ -259,7 +258,7 @@
           <div class="absolute inset-0 rounded-full border border-accent/20 animate-spin-slow"></div>
           <div class="absolute inset-4 rounded-full border border-dashed border-accent/10 animate-spin-slow" style="animation-direction:reverse;animation-duration:12s"></div>
           <!-- Avatar blob -->
-          <div class="absolute inset-8 blob bg-gradient-to-br from-accent via-green-600 to-emerald-500 opacity-80 glow"></div>
+          <div class="absolute inset-8 blob bg-gradient-to-br from-accent via-teal-500 to-cyan-400 opacity-80 glow"></div>
           <div class="absolute inset-8 flex items-center justify-center">
             <img src="pic2.png" alt="Mouad Anouar" class="w-full h-full rounded-full object-cover">
           </div>
@@ -270,7 +269,7 @@
           <div class="absolute -bottom-4 -left-4 float bg-dark-3 border border-pink-500/30 rounded-xl px-3 py-2 text-xs font-mono text-pink-400 flex items-center gap-1.5" style="animation-delay:-2s">
             <i data-lucide="zap" class="w-3 h-3"></i> Node.js
           </div>
-          <div class="absolute top-1/2 -right-14 float bg-dark-3 border border-green-500/30 rounded-xl px-3 py-2 text-xs font-mono text-green-400 flex items-center gap-1.5" style="animation-delay:-1s">
+          <div class="absolute top-1/2 -right-14 float bg-dark-3 border border-teal-500/30 rounded-xl px-3 py-2 text-xs font-mono text-teal-300 flex items-center gap-1.5" style="animation-delay:-1s">
             <i data-lucide="database" class="w-3 h-3"></i> MySQL
           </div>
         </div>
@@ -294,19 +293,19 @@
             <div class="flex items-center gap-2 px-4 py-3 bg-dark-4 border-b border-dark-4">
               <span class="w-3 h-3 rounded-full bg-red-500"></span>
               <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="w-3 h-3 rounded-full bg-teal-500"></span>
               <span class="ml-3 text-xs text-gray-500 font-mono">about.json</span>
             </div>
             <pre class="p-6 text-sm font-mono leading-relaxed overflow-x-auto text-gray-300"><code><span class="text-blue-400">{</span>
-  <span class="text-purple-400">"name"</span>: <span class="text-green-400">"Mouad Anouar"</span>,
-  <span class="text-purple-400">"role"</span>: <span class="text-green-400">"Full Stack Developer"</span>,
-  <span class="text-purple-400">"location"</span>: <span class="text-green-400">"Temara, Maroc"</span>,
-  <span class="text-purple-400">"education"</span>: <span class="text-green-400">"ISTA — Dev Web Full Stack"</span>,
+  <span class="text-purple-400">"name"</span>: <span class="text-teal-300">"Mouad Anouar"</span>,
+  <span class="text-purple-400">"role"</span>: <span class="text-teal-300">"Full Stack Developer"</span>,
+  <span class="text-purple-400">"location"</span>: <span class="text-teal-300">"Temara, Maroc"</span>,
+  <span class="text-purple-400">"education"</span>: <span class="text-teal-300">"ISTA — Dev Web Full Stack"</span>,
   <span class="text-purple-400">"available"</span>: <span class="text-cyan-400">true</span>,
   <span class="text-purple-400">"passions"</span>: <span class="text-blue-400">[</span>
-    <span class="text-green-400">"Clean Code"</span>,
-    <span class="text-green-400">"REST APIs"</span>,
-    <span class="text-green-400">"Great UX"</span>
+    <span class="text-teal-300">"Clean Code"</span>,
+    <span class="text-teal-300">"REST APIs"</span>,
+    <span class="text-teal-300">"Great UX"</span>
   <span class="text-blue-400">]</span>
 <span class="text-blue-400">}</span></code></pre>
           </div>
@@ -371,23 +370,23 @@
           <div class="space-y-5">
             <div class="skill-item" data-level="90">
               <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">HTML</span><span class="text-accent font-mono"></span></div>
-              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-teal-300 rounded-full skill-bar-fill" style="width:0%"></div></div>
             </div>
             <div class="skill-item" data-level="85">
               <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">React.js</span><span class="text-accent font-mono"></span></div>
-              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-teal-300 rounded-full skill-bar-fill" style="width:0%"></div></div>
             </div>
             <div class="skill-item" data-level="80">
               <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">JavaScript</span><span class="text-accent font-mono"></span></div>
-              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-teal-300 rounded-full skill-bar-fill" style="width:0%"></div></div>
             </div>
             <div class="skill-item" data-level="85">
               <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">Tailwind CSS</span><span class="text-accent font-mono"></span></div>
-              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-teal-300 rounded-full skill-bar-fill" style="width:0%"></div></div>
             </div>
             <div class="skill-item" data-level="75">
               <div class="flex justify-between text-sm mb-2"><span class="text-gray-300 font-medium">WordPress / WooCommerce</span><span class="text-accent font-mono"></span></div>
-              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-green-400 rounded-full skill-bar-fill" style="width:0%"></div></div>
+              <div class="h-1.5 bg-dark-4 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accent to-teal-300 rounded-full skill-bar-fill" style="width:0%"></div></div>
             </div>
           </div>
         </div>
@@ -453,9 +452,9 @@
 
         <!-- Project 1 — Tirani -->
         <div class="card rounded-2xl overflow-hidden reveal project-card group">
-          <div class="h-44 bg-gradient-to-br from-accent/20 via-emerald-900/30 to-dark-3 relative overflow-hidden">
+          <div class="h-44 bg-gradient-to-br from-accent/20 via-teal-900/30 to-dark-3 relative overflow-hidden">
             <div class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <i data-lucide="globe" class="w-16 h-16 text-accent opacity-60"></i>
+              <img src="web-screenshot.jpg" alt="" srcset="">
             </div>
             <div class="absolute top-3 right-3"><span class="tag">Full Stack</span></div>
           </div>
@@ -500,7 +499,7 @@
           </div>
           <h3 class="text-white font-bold mb-2">More on GitHub</h3>
           <p class="text-gray-500 text-sm mb-5">Check out my open-source contributions and side projects.</p>
-          <a href="#" class="text-xs font-semibold text-accent hover:underline">View all repos →</a>
+          <a href="https://github.com/M0U3AD" class="text-xs font-semibold text-accent hover:underline">View all repos →</a>
         </div>
 
       </div>
@@ -530,7 +529,7 @@
             </div>
             <p class="text-gray-400 text-sm leading-relaxed mb-4">Designed and developed a complete full stack web application. Built a React.js + Vite frontend, a robust RESTful API with Node.js/Express including JWT authentication and role-based permissions, and a MySQL database optimised for data integrity and query performance.</p>
             <div class="flex flex-wrap gap-2">
-              <span class="tag">React.js</span><span class="tag">Vite</span><span class="tag">Tailwind CSS</span><span class="tag">Node.js</span><span class="tag">Express.js</span><span class="tag">MySQL</span><span class="tag">JWT</span><span class="tag">Linux</span>
+              <span class="tag">React.js</span><span class="tag">Vite</span><span class="tag">Tailwind CSS</span><span class="tag">Node.js</span><span class="tag">Express.js</span><span class="tag">MySQL</span><span class="tag">JWT</span>
             </div>
           </div>
         </div>
@@ -559,12 +558,13 @@
           <div class="card rounded-2xl p-6">
             <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
               <div>
-                <h3 class="text-white font-bold text-lg">Full Stack Web Development</h3>
+                <h3 class="text-white font-bold text-lg"> Full Stack Web Development</h3>
                 <p class="text-pink-400 text-sm font-medium">ISTA — Diplôme Développement Web</p>
               </div>
               <span class="tag">2024 — Present</span>
             </div>
-            <p class="text-gray-400 text-sm leading-relaxed mb-4">Two-year professional training programme covering modern web development: JavaScript, React.js, Node.js, REST APIs, MySQL, Laravel/PHP, Git and Linux. Baccalauréat Sciences Physiques (2023–2024).</p>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4"> <span class="text-pink-400">- </span> Two-year professional training programme covering modern web development: JavaScript, React.js, Node.js, REST APIs, MySQL, Laravel/PHP, Git and Linux.<br>
+               <span class="text-pink-400">- </span>Baccalauréat Sciences Physiques (2023–2024).</p>
             <div class="flex flex-wrap gap-2">
               <span class="tag">JavaScript</span><span class="tag">React.js</span><span class="tag">Node.js</span><span class="tag">MySQL</span><span class="tag">Laravel</span><span class="tag">Git</span>
             </div>
@@ -648,7 +648,7 @@
             <span id="btn-text">Send Message</span>
             <svg id="btn-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
           </button>
-          <p id="form-success" class="hidden text-center text-green-400 text-sm mt-4 flex items-center justify-center gap-1.5"><i data-lucide="circle-check" class="w-4 h-4"></i> Message sent! I'll get back to you soon.</p>
+          <p id="form-success" class="hidden text-center text-teal-300 text-sm mt-4 flex items-center justify-center gap-1.5"><i data-lucide="circle-check" class="w-4 h-4"></i> Message sent! I'll get back to you soon.</p>
         </form>
       </div>
     </div>
