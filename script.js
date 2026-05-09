@@ -82,6 +82,138 @@
       }, 1200);
     }
 
+    /* ── Project carousel modal ── */
+    const projectModal = document.getElementById('project-modal');
+    const projectModalPanel = document.getElementById('project-modal-panel');
+    const projectModalSlide = document.getElementById('project-modal-slide');
+    const projectModalThumbs = document.getElementById('project-modal-thumbs');
+    const projectShowcases = {
+      tirani: {
+        slides: [
+          {
+            type: 'image',
+            src: './assets/tirani/web-screenshot.jpg',
+            alt: 'Tirani project dashboard screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/téléchargement.png',
+            alt: 'Tirani project screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/téléchargement (1).png',
+            alt: 'Tirani project screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/téléchargement (2).png',
+            alt: 'Tirani project screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/téléchargement (3).png',
+            alt: 'Tirani project screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/téléchargement (4).png',
+            alt: 'Tirani project screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/téléchargement (5).png',
+            alt: 'Tirani project screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/téléchargement (6).png',
+            alt: 'Tirani project screenshot'
+          }
+        ]
+      }
+    };
+
+    let activeProjectKey = 'tirani';
+    let activeProjectSlide = 0;
+
+    function renderProjectSlide(slide) {
+      return `
+        <div class="relative h-full min-h-[320px] sm:min-h-[520px]">
+          <img src="${slide.src}" alt="${slide.alt}" class="h-full w-full object-cover object-top">
+        </div>
+      `;
+    }
+
+    function renderProjectCarousel() {
+      const project = projectShowcases[activeProjectKey];
+      if (!project) return;
+
+      const slide = project.slides[activeProjectSlide];
+      projectModalSlide.innerHTML = renderProjectSlide(slide);
+      projectModalThumbs.innerHTML = project.slides.map((item, index) => {
+        const isActive = index === activeProjectSlide;
+        return `
+          <button type="button" onclick="setProjectSlide(${index})" class="group flex min-w-[120px] flex-col gap-2 rounded-2xl border p-2 text-left transition ${isActive ? 'border-accent/50 bg-accent/10' : 'border-dark-4 bg-dark-3/60 hover:border-accent/30'}">
+            <div class="h-16 overflow-hidden rounded-xl border border-white/5">
+              <img src="${item.src}" alt="${item.alt}" class="h-full w-full object-cover object-top">
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function openProjectCarousel(projectKey) {
+      activeProjectKey = projectShowcases[projectKey] ? projectKey : 'tirani';
+      activeProjectSlide = 0;
+      renderProjectCarousel();
+      projectModal.classList.remove('hidden');
+      projectModal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+
+      if (window.gsap) {
+        gsap.fromTo(projectModalPanel, { opacity: 0, y: 24, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: 'power2.out' });
+      }
+    }
+
+    function closeProjectCarousel() {
+      projectModal.classList.add('hidden');
+      projectModal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function setProjectSlide(index) {
+      const project = projectShowcases[activeProjectKey];
+      if (!project) return;
+      activeProjectSlide = (index + project.slides.length) % project.slides.length;
+      renderProjectCarousel();
+    }
+
+    function previousProjectSlide() {
+      setProjectSlide(activeProjectSlide - 1);
+    }
+
+    function nextProjectSlide() {
+      setProjectSlide(activeProjectSlide + 1);
+    }
+
+    window.openProjectCarousel = openProjectCarousel;
+    window.closeProjectCarousel = closeProjectCarousel;
+    window.setProjectSlide = setProjectSlide;
+    window.previousProjectSlide = previousProjectSlide;
+    window.nextProjectSlide = nextProjectSlide;
+
+    document.addEventListener('keydown', (event) => {
+      if (projectModal.classList.contains('hidden')) return;
+      if (event.key === 'Escape') closeProjectCarousel();
+      if (event.key === 'ArrowLeft') previousProjectSlide();
+      if (event.key === 'ArrowRight') nextProjectSlide();
+    });
+
     /* ── GSAP Animations ── */
     gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
