@@ -1088,7 +1088,11 @@
     }
 
     function initTheme() {
-      applyTheme(getSavedTheme() || 'dark');
+      if (window.innerWidth <= 768) {
+        applyTheme('light');
+      } else {
+        applyTheme(getSavedTheme() || 'dark');
+      }
       updateMobileToggleState();
     }
 

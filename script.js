@@ -110,24 +110,32 @@
             src: './assets/tirani/téléchargement (2).png',
             alt: 'Tirani project screenshot'
           },
-          {
-            type: 'image',
-            src: './assets/tirani/téléchargement (3).png',
-            alt: 'Tirani project screenshot'
-          },
+         
           {
             type: 'image',
             src: './assets/tirani/téléchargement (4).png',
             alt: 'Tirani project screenshot'
           },
+        
+         
           {
             type: 'image',
-            src: './assets/tirani/téléchargement (5).png',
+            src: './assets/tirani/s1.png',
             alt: 'Tirani project screenshot'
           },
           {
             type: 'image',
-            src: './assets/tirani/téléchargement (6).png',
+            src: './assets/tirani/s2.png',
+            alt: 'Tirani project screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/s3.png',
+            alt: 'Tirani project screenshot'
+          },
+          {
+            type: 'image',
+            src: './assets/tirani/s4.png',
             alt: 'Tirani project screenshot'
           }
         ]
