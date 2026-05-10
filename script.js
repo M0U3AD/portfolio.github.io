@@ -33,9 +33,9 @@
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       if (window.scrollY > 50) {
-        navbar.classList.add('bg-dark/90', 'backdrop-blur-md', 'border-b', 'border-dark-4', 'shadow-lg');
+        navbar.classList.add('nav-scrolled');
       } else {
-        navbar.classList.remove('bg-dark/90', 'backdrop-blur-md', 'border-b', 'border-dark-4', 'shadow-lg');
+        navbar.classList.remove('nav-scrolled');
       }
     }, { passive: true });
 
@@ -243,15 +243,40 @@
       );
     });
 
-    // Skill bars
-    document.querySelectorAll('.skill-item').forEach(item => {
-      const level = item.dataset.level;
-      const bar   = item.querySelector('.skill-bar-fill');
-      ScrollTrigger.create({
-        trigger: item,
-        start: 'top 90%',
-        onEnter: () => gsap.to(bar, { width: level + '%', duration: 1.5, ease: 'power2.out' }),
-      });
+    // Expertise card stagger
+    gsap.utils.toArray('.expertise-card').forEach((card, i) => {
+      gsap.fromTo(card,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.7,
+          delay: i * 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 88%',
+            toggleActions: 'play none none none',
+          }
+        }
+      );
+    });
+
+    // Testimonial card stagger
+    gsap.utils.toArray('.testimonial-card').forEach((card, i) => {
+      gsap.fromTo(card,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.7,
+          delay: i * 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 88%',
+            toggleActions: 'play none none none',
+          }
+        }
+      );
     });
 
     // Project cards stagger
@@ -281,3 +306,180 @@
       repeat: -1,
       stagger: 0.5,
     });
+
+    /* ── ⚡ PREMIUM ENHANCEMENTS ⚡ ── */
+
+    // ── Scroll progress bar ──
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      progressBar.style.width = progress + '%';
+    }, { passive: true });
+
+    // ── Mouse-reactive hero gradient ──
+    const heroGradient = document.getElementById('hero-gradient');
+    if (heroGradient && window.matchMedia('(pointer:fine)').matches) {
+      document.getElementById('hero').addEventListener('mousemove', (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        heroGradient.style.background = `radial-gradient(600px at ${x}% ${y}%, rgba(1,107,97,0.15), transparent 70%)`;
+      });
+    }
+
+    // ── Magnetic buttons ──
+    document.querySelectorAll('.magnetic').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+      });
+    });
+
+    // ── Animated counters ──
+    function animateCounters() {
+      document.querySelectorAll('.counter-value').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        if (target === 0) return;
+        let current = 0;
+        const step = Math.max(1, Math.floor(target / 30));
+        const update = () => {
+          current += step;
+          if (current >= target) {
+            el.textContent = target;
+            return;
+          }
+          el.textContent = current;
+          requestAnimationFrame(update);
+        };
+        update();
+      });
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          counterObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+    const counterSection = document.querySelector('.counter-value');
+    if (counterSection) counterObserver.observe(counterSection.closest('.grid'));
+
+    // ── Split-text animation for headings ──
+    document.querySelectorAll('[data-split]').forEach(heading => {
+      const children = [];
+      heading.childNodes.forEach(node => {
+        if (node.nodeType === 3 && node.textContent.trim()) {
+          const words = node.textContent.split(/(\s+)/);
+          words.forEach(word => {
+            if (word.trim()) {
+              const span = document.createElement('span');
+              span.className = 'split-word';
+              span.textContent = word;
+              children.push(span);
+            } else {
+              children.push(document.createTextNode(word));
+            }
+          });
+        } else if (node.nodeType === 1) {
+          const clone = node.cloneNode(true);
+          clone.className = (clone.className || '') + ' split-word';
+          children.push(clone);
+        } else {
+          children.push(node);
+        }
+      });
+      heading.innerHTML = '';
+      children.forEach(child => heading.appendChild(child));
+      const words = heading.querySelectorAll('.split-word');
+      gsap.fromTo(words,
+        { opacity: 0, y: 30, rotateX: 20 },
+        {
+          opacity: 1, y: 0, rotateX: 0,
+          duration: 0.8,
+          stagger: 0.04,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: heading,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          }
+        }
+      );
+    });
+
+    // ── Smooth anchor scroll ──
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const target = document.querySelector(anchor.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ── ⚡ MORE PREMIUM FEATURES ⚡ ── */
+
+    // ── Loading screen ──
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 600);
+    });
+
+    // ── Back to top button ──
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('show', window.scrollY > 500);
+    }, { passive: true });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ── 3D tilt effect on project cards ──
+    document.querySelectorAll('.tilt-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -8;
+        const rotateY = ((x - centerX) / centerX) * 8;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+      });
+    });
+
+    // ── Button ripple effect ──
+    document.querySelectorAll('.ripple-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple-effect';
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+        ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 500);
+      });
+    });
+
+    // ── Re-init Lucide after DOM changes ──
+    if (window.lucide) lucide.createIcons();
+
+    // ── Mobile theme toggle initial state ──
+    updateMobileToggleState();
